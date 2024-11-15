@@ -2,10 +2,10 @@ const pool = require('./config/db');
 const { fetchPlaceDetails } = require('./services/googlePlacesService');
 const logger = require('./utils/logger');
 
-const SLEEP_INTERVAL = 300;
+const SLEEP_INTERVAL = 800;
 
 async function getExistingSpots() {
-  const res = await pool.query('SELECT spot_id, place_id FROM spots ORDER BY spot_id LIMIT 2 OFFSET 32');
+  const res = await pool.query('SELECT spot_id, place_id FROM spots ORDER BY spot_id LIMIT 10');
   return res.rows;
 }
 
@@ -44,7 +44,7 @@ async function startSyncProcess() {
     if (placeData) {
       await updateSpotData(placeId, placeData);
     } else {
-      logger.warn(`\nFailed to fetch data for place_id: ${placeId}. ${spotId}. Continuing...\n`);
+      logger.warn(`Failed to fetch data for place_id: ${placeId}. ${spotId}. Continuing...\n`);
     }
 
     await sleep(SLEEP_INTERVAL);

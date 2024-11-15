@@ -18,11 +18,12 @@ async function fetchPlaceDetails(placeId) {
     if (response.data.status === 'OK') {
       return response.data.result;
     } else {
-      logger.error('Error fetching place data:', response.data.error_message);
+      logger.error(`Error fetching place data: ${response.data.status}`);
+      logger.warn(response.data.error_message);
       return null;
     }
   } catch (error) {
-    logger.error('API request error:', error);
+    logger.error(`API request error: ${error}`);
     if (error.response) {
       logger.error(`${error.response.status}, ${error.message}`);
     }
