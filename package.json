@@ -1,0 +1,25 @@
+{
+  "name": "placesapi-synctool",
+  "version": "1.0.0",
+  "description": "PlacesAPI-SyncTool: A Node.js utility for synchronizing and enriching place data in PostgreSQL with Google Places API. Automates data updates for address components, plus codes, and place types, supporting scheduled updates and real-time data integrity.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-darul/PlacesAPI-SyncTool.git"
+  },
+  "author": "a-darul",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/a-darul/PlacesAPI-SyncTool/issues"
+  },
+  "homepage": "https://github.com/a-darul/PlacesAPI-SyncTool#readme",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "pg": "^8.13.1"
+  }
+}
