@@ -5,7 +5,7 @@ const logger = require('./utils/logger');
 const SLEEP_INTERVAL = 300;
 
 async function getExistingSpots() {
-  const res = await pool.query('SELECT spot_id, place_id FROM spots ORDER BY spot_id LIMIT 10 OFFSET 10');
+  const res = await pool.query('SELECT spot_id, place_id FROM spots ORDER BY spot_id LIMIT 2 OFFSET 32');
   return res.rows;
 }
 
@@ -26,12 +26,12 @@ function sleep(ms) {
 }
 
 async function startSyncProcess() {
-  logger.info('Starting PlacesAPI-SyncTool...');
+  logger.debug('Starting PlacesAPI-SyncTool...');
   const spots = await getExistingSpots();
   logger.info(`Found ${spots.length} spots to sync.`);
 
   let index = 0;
-  logger.info('Running sync process...\n');
+  logger.debug('Running sync process...\n');
 
   for (const spot of spots) {
     const spotId = spot.spot_id;
@@ -50,7 +50,7 @@ async function startSyncProcess() {
     await sleep(SLEEP_INTERVAL);
   }
 
-  logger.info('\nSync process completed.');
+  logger.debug('Sync process completed.');
   process.exit(0);
 }
 
