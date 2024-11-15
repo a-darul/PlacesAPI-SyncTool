@@ -10,7 +10,7 @@ async function fetchPlaceDetails(placeId) {
       params: {
         place_id: placeId,
         key: API_KEY,
-        fields: 'address_components,plus_code,types',
+        fields: 'address_components,plus_code,types,place_id',
         language: 'en'
       },
     });
