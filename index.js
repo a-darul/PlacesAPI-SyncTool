@@ -1,21 +1,21 @@
 const pool = require('./config/db');
-const { fetchPlaceDetails } = require('./services/googlePlacesService');
+const { fetchPreferredPlaceDetails } = require('./services/googlePlacesService');
 const logger = require('./utils/logger');
 
 const SLEEP_INTERVAL = 1200;
 
 async function getExistingSpots() {
-  const res = await pool.query('SELECT spot_id, place_id FROM spots WHERE spot_id < 4571 ORDER BY spot_id DESC LIMIT 2');
+  const res = await pool.query('SELECT spot_id, place_id FROM spots ORDER BY spot_id DESC LIMIT 5');
   return res.rows;
 }
 
 async function updateSpotData(placeId, placeData) {
-  const { address_components, plus_code, types } = placeData;
+  const { websiteUri: website, ...details } = placeData;
 
   await pool.query(
-    `UPDATE spots SET address_components = $1, plus_code = $2, types = $3, place_id = $4
-     WHERE place_id = $5`,
-    [address_components, plus_code, types, placeData.place_id, placeId]
+    `UPDATE spots SET website = $1, details = $2
+     WHERE place_id = $3`,
+    [website, details, placeId]
   );
 
   logger.info(`Updated spot with place_id: ${placeId}`);
@@ -39,7 +39,7 @@ async function startSyncProcess() {
 
     logger.info(`${count}. Syncing spot_id: ${spotId}`);
 
-    const placeData = await fetchPlaceDetails(placeId);
+    const placeData = await fetchPreferredPlaceDetails(placeId);
 
     if (placeData) {
       await updateSpotData(placeId, placeData);

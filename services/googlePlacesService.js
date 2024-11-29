@@ -31,4 +31,29 @@ async function fetchPlaceDetails(placeId) {
   }
 }
 
-module.exports = { fetchPlaceDetails };
+async function fetchPreferredPlaceDetails(placeId) {
+  try {
+    const response = await axios.get(`https://places.googleapis.com/v1/places/${placeId}`, {
+      headers: {
+        'X-Goog-Api-Key': API_KEY,
+        'X-Goog-FieldMask': `websiteUri,allowsDogs,curbsidePickup,delivery,dineIn,editorialSummary,evChargeOptions,fuelOptions,goodForChildren,goodForGroups,goodForWatchingSports,liveMusic,menuForChildren,parkingOptions,paymentOptions,outdoorSeating,reservable,restroom,reviews,servesBeer,servesBreakfast,servesBrunch,servesCocktails,servesCoffee,servesDessert,servesDinner,servesLunch,servesVegetarianFood,servesWine,takeout`,
+      },
+    });
+
+    if (Object.keys(response.data).length === 0) {
+      logger.warn(`No place data found for placeId: ${placeId}`);
+      return null;
+    }
+
+    return response.data;
+
+  } catch (error) {
+    logger.error(`API request error: ${error}`);
+    if (error.response) {
+      logger.error(`${error.response.data.error.status}, ${error.response.data.error.message}`);
+    }
+    return null;
+  }
+}
+
+module.exports = { fetchPlaceDetails, fetchPreferredPlaceDetails };
